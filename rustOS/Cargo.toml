@@ -2,7 +2,14 @@
 name = "rustOS"
 version = "0.1.0"
 edition = "2021"
+authors = ["Viranchee Lotia hey@viranchee.com"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# cargo build
+[profile.dev]
+panic = "abort" # Disable stack unwind on panic
+
+# cargo build --release
+[profile.release]
+panic = "abort" # Disable stack unwind on panic
 
 [dependencies]
