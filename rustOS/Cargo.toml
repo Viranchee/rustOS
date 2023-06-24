@@ -1,5 +1,5 @@
 [package]
-name = "rustOS"
+name = "rust_os"
 version = "0.1.0"
 edition = "2021"
 authors = ["Viranchee Lotia hey@viranchee.com"]
@@ -13,3 +13,4 @@ panic = "abort" # Disable stack unwind on panic
 panic = "abort" # Disable stack unwind on panic
 
 [dependencies]
+bootloader = "0.9.23"
