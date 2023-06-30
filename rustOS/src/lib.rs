@@ -6,9 +6,9 @@
 #![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
+pub mod interrupts;
 pub mod serial;
 pub mod vga_buffer;
-pub mod interrupts;
 pub trait Testable {
     fn run(&self) -> ();
 }
@@ -37,7 +37,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n", info);
     exit_qemu(QemuExitCode::Failed);
-    loop { }
+    loop {}
 }
 
 #[cfg(test)]
@@ -54,10 +54,9 @@ fn panic(info: &PanicInfo) -> ! {
     test_panic_handler(info);
 }
 
-
 #[test_case]
 fn trivial_assertion() {
-    assert_eq!(1,1);
+    assert_eq!(1, 1);
 }
 
 #[test_case]
@@ -71,7 +70,6 @@ fn test_println_many() {
         println!("test_println_many output");
     }
 }
-
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
