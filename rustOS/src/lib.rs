@@ -6,8 +6,11 @@
 #![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
+
+use bootloader::{entry_point, BootInfo};
 pub mod gdt;
 pub mod interrupts;
+pub mod memory;
 pub mod serial;
 pub mod vga_buffer;
 pub trait Testable {
@@ -38,6 +41,16 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n", info);
     exit_qemu(QemuExitCode::Failed);
+    hlt_loop();
+}
+
+#[cfg(test)]
+entry_point!(test_kernel_main);
+
+#[cfg(test)]
+fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
+    init();
+    test_main();
     hlt_loop();
 }
 
