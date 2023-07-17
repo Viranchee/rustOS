@@ -20,7 +20,8 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
     let mut mapper = unsafe { memory::init(phys_mem_offset) };
-    let mut frame_allocator = memory::EmptyFrameAllocator;
+    let mut frame_allocator =
+        unsafe { memory::BootInfoFrameAllocator::init(&boot_info.memory_map) };
 
     // map an unused page
     let page = Page::containing_address(VirtAddr::new(0));
@@ -36,22 +37,6 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     println!("It did not crash!");
     rust_os::hlt_loop();
 }
-
-// #[no_mangle]
-// pub extern "C" fn _start(boot_info: &'static BootInfo) -> ! {
-//     println!("Hello World{}", "!");
-//     rust_os::init();
-
-//     use x86_64::registers::control::Cr3;
-//     let (level_4_page_table, _) = Cr3::read();
-//     println!("L4 pt at {:?}", level_4_page_table.start_address());
-
-//     #[cfg(test)]
-//     test_main();
-
-//     println!("It did not crash!");
-//     rust_os::hlt_loop();
-// }
 
 // Called on Panic
 #[cfg(not(test))]
